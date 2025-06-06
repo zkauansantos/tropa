@@ -29,7 +29,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
   const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
 
-  const login = useCallback(async (email: string, _: string) => {
+  const login = useCallback(async (email: string) => {
     await delay();
     setIsAuthenticated(true);
     setUser({
@@ -37,13 +37,13 @@ export function AuthProvider({ children }: PropsWithChildren) {
       name: 'Kaique Steck',
     });
     router.replace('/');
-  }, []);
+  }, [router]);
 
   const logout = useCallback(() => {
     setIsAuthenticated(false);
     setUser(null);
     router.replace('/login');
-  }, []);
+  }, [router]);
 
   return (
     <AuthContext.Provider
