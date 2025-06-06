@@ -29,7 +29,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
   const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
 
-  const login = useCallback(async (email: string, password: string) => {
+  const login = useCallback(async (email: string, _: string) => {
     await delay();
     setIsAuthenticated(true);
     setUser({
