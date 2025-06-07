@@ -1,12 +1,34 @@
+'use client';
+
 import { AppSidebar } from '@/components/app-sidebar';
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
+import { useAuth } from '@/contexts/AuthContext';
+import { LoaderCircle } from 'lucide-react';
+import { redirect } from 'next/navigation';
+import { useEffect } from 'react';
 import { EventsTable } from './_components/EventsTable';
 
 export default function Page() {
+  const { isAuthenticated } = useAuth();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      redirect('/login');
+    }
+  }, [isAuthenticated]);
+
+  if (!isAuthenticated) {
+    return (
+      <div className='flex h-screen items-center justify-center bg-application'>
+        <LoaderCircle className='h-8 w-8 animate-spin text-semidark' />
+      </div>
+    );
+  }
+
   return (
     <SidebarProvider
       style={

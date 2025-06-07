@@ -1,6 +1,6 @@
 'use client';
 
-import { delay } from '@/lib/utils';
+import { delay, safeParseLocalStorage, safeSetLocalStorage } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import {
   createContext,
@@ -25,24 +25,32 @@ interface IAuthContext {
 const AuthContext = createContext<IAuthContext>({} as IAuthContext);
 
 export function AuthProvider({ children }: PropsWithChildren) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    safeParseLocalStorage<boolean>('isAuthenticated') || false
+  );
   const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
 
-  const login = useCallback(async (email: string) => {
-    await delay();
-    setIsAuthenticated(true);
-    setUser({
-      email,
-      name: 'Kaique Steck',
-    });
-    router.replace('/');
-  }, [router]);
+  const login = useCallback(
+    async (email: string) => {
+      await delay();
+      setIsAuthenticated(true);
+      setUser({
+        email,
+        name: 'Kaique Steck',
+      });
+      router.replace('/');
+
+      safeSetLocalStorage('isAuthenticated', true);
+    },
+    [router]
+  );
 
   const logout = useCallback(() => {
     setIsAuthenticated(false);
     setUser(null);
     router.replace('/login');
+    safeSetLocalStorage('isAuthenticated', false);
   }, [router]);
 
   return (
