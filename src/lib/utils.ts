@@ -13,7 +13,7 @@ export function safeParseLocalStorage<T>(key: string): T | null {
   try {
     const item = localStorage.getItem(key);
     return item ? JSON.parse(item) : null;
-  } catch (error) {
+  } catch {
     return null;
   }
 }
@@ -21,7 +21,7 @@ export function safeParseLocalStorage<T>(key: string): T | null {
 export function safeSetLocalStorage<T>(key: string, value: T): void {
   try {
     localStorage.setItem(key, JSON.stringify(value));
-  } catch (error) {
+  } catch {
     //  Do nothing
   }
 }
